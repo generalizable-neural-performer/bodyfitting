@@ -15,7 +15,7 @@ cd thirdparty/mesh_grid && python setup.py install
 Note: *neural_renderer* in this repo is a modified version for texture fitting. *mesh_grid* is our implemetation of mesh closest point.
 
 ## Data Download
-Please download the SMPLx model from [here](https://smpl-x.is.tue.mpg.de/)
+Please download the SMPLx model from [here](https://smpl-x.is.tue.mpg.de/), and HMR model from [here](https://hkustconnect-my.sharepoint.com/:u:/g/personal/wchengad_connect_ust_hk/EXuFgaiOuMRMh8O_oNzc3DYBlSyxsVOPWNA-Qn3m4PV-zA?e=Aie8nd), and put them in the *data* folder.
 
 ## 2D keypoint detector
 We require Openpose for 2D keypoint detection, please build the cpp version from the [instructions](https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/installation/0_index.md#compiling-and-running-openpose-from-source).
