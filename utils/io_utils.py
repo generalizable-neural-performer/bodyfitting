@@ -260,32 +260,6 @@ def keypoints_hand_face_list_from_openpose(openpose_file):
 
 
 
-def keypoints_from_sdk2d_video(pred_dir, num_keypoints=23):
-    pose2d_file = os.path.join(pred_dir, "pose2d_hrnet.txt")
-    conf2d_file = os.path.join(pred_dir, "confidence2d_hrnet.txt")
-    index_file = os.path.join(pred_dir, "imglist_origin.txt")
-    p2d = []
-    conf2d = []
-    indexs = []
-    with open(pose2d_file, "r") as f:
-        for line in f.readlines():
-            p2d.append(list(map(float, line.split())))
-    p2d = np.array(p2d).reshape([-1, num_keypoints, 2])
-    with open(conf2d_file, "r") as f:
-        for line in f.readlines():
-            conf2d.append(list(map(float, line.split())))
-    conf2d = np.array(conf2d).reshape([-1, num_keypoints, 1])
-    with open(index_file, "r") as f:
-        for line in f.readlines():
-            indexs.append(list(map(int, line.split()))[0])
-    # modify toe pos
-    for i in range(p2d.shape[0]):
-        p2d[i][17] = p2d[i][12] + (p2d[i][17] - p2d[i][12]) * 1.4
-        p2d[i][18] = p2d[i][13] + (p2d[i][18] - p2d[i][13]) * 1.4
-    keypoints = np.concatenate((p2d, conf2d), axis=2)
-    return keypoints, indexs
-
-
 def bbox_from_keypoints(keypoints, rescale=1.2, detection_thresh=0.2):
     keypoints = np.reshape(keypoints, (-1, 3))
     valid = keypoints[:, -1] > detection_thresh
@@ -296,12 +270,6 @@ def bbox_from_keypoints(keypoints, rescale=1.2, detection_thresh=0.2):
     scale = bbox_size / 200.0
     scale *= rescale
     return center, scale
-
-
-def make_dirs(folder):
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-
 
 def make_hmr_vec(pose, betas, cam_t, smpl_type):
     if smpl_type == "smplx":
@@ -402,77 +370,6 @@ def render_smpl(pred_vertices, pred_faces, img, camera_translation, output_filen
     cv2.imwrite(output_filename, fig)
     # print("{} renderer created!".format(output_filename))
 
-
-def render_smpl_fixed_size(pred_vertices, pred_faces, img, height, width, camera_translation, K, pose=None, dist=100):
-    pred_faces = pred_faces.astype(np.int32)
-    vertices = torch.tensor(pred_vertices, dtype=torch.float32)
-    faces = torch.tensor(pred_faces, dtype=torch.int32)
-    if len(vertices.shape) == 2:
-        vertices = vertices[None, :, :]  # [num_vertices, XYZ] -> [batch_size=1, num_vertices, XYZ]
-    if len(faces.shape) == 2:
-        faces = faces[None, :, :]  # [num_faces, 3] -> [batch_size=1, num_faces, 3]
-    texture_size = 2
-    textures = torch.ones(1, faces.shape[1], texture_size, texture_size, texture_size, 3, dtype=torch.float32).cuda()
-    if pose is None:
-        t = camera_translation.reshape([1, 1, 3])
-        R = np.eye(3).reshape([1, 3, 3])
-    else:
-        t = pose[:3, 3].reshape([1, 1, 3])
-        R = pose[:3,:3].reshape([1, 3, 3])
-    image_size = max(constants.FX, 1000)
-    renderer = nr.Renderer(image_size=image_size, fill_back=False, camera_mode='projection', 
-                            K=K, R=R, t=t, orig_size=image_size, near=0, far=dist*2)
-    images, rend_depth, _ = renderer(vertices.cuda(), faces.cuda(), textures)
-    image = images.detach().cpu().numpy()[0].transpose((1, 2, 0))
-    rend_depth = rend_depth.detach().cpu().numpy()[0]
-    valid_mask = (rend_depth < dist*2)[:, :, None]
-    valid_mask = valid_mask[:height, :width, :]
-    image = image[:height, :width, :]
-    output_img = (image * valid_mask * 255 + (1 - valid_mask) * img)
-    fig = output_img.astype(np.uint8)
-    return fig
-    # cv2.imwrite(output_filename, fig)
-    # print("{} renderer created!".format(output_filename))
-
-
-def update_camera_info(target_dir, height, width):
-    info_file = os.path.join(target_dir, "intrinsics")
-    intrinsics = []
-    if os.path.exists(info_file):
-        with open (os.path.join(target_dir, "intrinsics"), "r") as f:
-            for line in f:
-                nums = line[:-1].split(" ")[-4:]
-            for item in nums:
-                intrinsics.append(float(item))
-        constants.FX = width * intrinsics[0]
-        constants.FY = height * intrinsics[1]
-        constants.CX = width * intrinsics[2]
-        constants.CY = height * intrinsics[3]
-        constants.WIDTH = width
-        constants.HEIGHT = height
-    else:
-        # print("no intrinsic file found!  use default!")
-        constants.FX = max(1, width, height)
-        constants.FY = max(1, width, height)
-        constants.CX = width * 0.5
-        constants.CY = height * 0.5
-        constants.WIDTH = width
-        constants.HEIGHT = height
-    # calib_file = os.path.join(target_dir, "calib.bin")
-
-
-def keypoints_from_sdk2d_face(pred_dir, num_keypoints=106):
-    face2d_file = os.path.join(pred_dir, "face106.txt")
-    p2d = []
-    with open(face2d_file, "r") as f:
-        for line in f.readlines():
-            p2d.append(list(map(float, line.split())))
-    p2d = np.array(p2d).reshape([-1, num_keypoints, 2])
-    mapping = list(range(33, 64)) + list(range(84, 104)) + [x * 2 for x in range(17)]
-    p2d = p2d[:, mapping]
-    conf2d = np.ones((p2d.shape[0], p2d.shape[1], 1))
-    keypoints = np.concatenate((p2d, conf2d), axis=2)
-    return keypoints
 
 def normalize_v3(arr: np.ndarray):
     ''' Normalize a numpy array of 3 component vectors shape=(n,3) '''

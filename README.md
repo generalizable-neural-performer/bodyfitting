@@ -1,6 +1,8 @@
-# BodyFitting - A Multi-view SMPL & SMPLX Optimization Framework
+# BodyFitting - A Multi-view SMPLx Optimization Framework
 
-Bodyfitting is the SMPLx fitting tool in "Generalizable Neural Performer: Learning Robust Radiance Fields for Human Novel View Synthesis" and GeneBody Dataset.
+Bodyfitting is the SMPLx fitting tool in "Generalizable Neural Performer: Learning Robust Radiance Fields for Human Novel View Synthesis" and GeneBody Dataset. 
+
+This toolbox can register SMPLx from calibrated motion capture images, as well as the synthetic meshes; SMPL+D and texture fitting is also provided.
 
 ## Setup environment
 The project is built on python3.6 and torch 1.2, you can set up the environment as:
@@ -10,7 +12,10 @@ pip install -r requirements.txt
 cd thirdparty/neural_renderer && python setup.py install
 cd thirdparty/mesh_grid && python setup.py install
 ```
-Note: neural_renderer in this repo is a modified version for texture fitting. mesh_grid is our implemetation of mesh closest point.
+Note: *neural_renderer* in this repo is a modified version for texture fitting. *mesh_grid* is our implemetation of mesh closest point.
+
+## Data Download
+Please download the SMPLx model from [here](https://smpl-x.is.tue.mpg.de/)
 
 ## 2D keypoint detector
 We require Openpose for 2D keypoint detection, please build the cpp version from the [instructions](https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/installation/0_index.md#compiling-and-running-openpose-from-source).
@@ -49,4 +54,12 @@ If you find this repo useful for your work, please cite the follow technical pap
     publisher = {arXiv},
     year = {2022},
   }
+
+@inproceedings{SMPL-X:2019,
+  title = {Expressive Body Capture: {3D} Hands, Face, and Body from a single Image},
+  author = {Pavlakos, Georgios and Choutas, Vasileios and Ghorbani, Nima and Bolkart, Timo and Osman, Ahmed A. A. and Tzionas, Dimitrios and Black, Michael J.},
+  booktitle = {Proceedings IEEE Conf. on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {10975--10985},
+  year = {2019}
+}
 ```
