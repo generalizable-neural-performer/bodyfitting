@@ -129,7 +129,7 @@ logs/
 *.pyc
 
 # data files
-data/*
+data/smpl*
 # But not the README
 !data/README.md
 
