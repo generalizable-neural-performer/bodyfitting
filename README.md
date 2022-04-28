@@ -38,12 +38,14 @@ python apps/rp_fitting.py --target_dir path_to_images --info_dir path_to_csv_fil
 ```
 
 ### Texture fitting
-Texture fitting takes opitmized SMPL+D as input, and optimize the texture image by comparing the rendered image of groudtruth mesh and SMPL+D mesh. The process and results are as follows:
+Texture fitting takes opitmized SMPL+D as input, and optimize the texture image by the L2 loss between rendered images of groudtruth mesh and SMPL+D mesh. The process and results are as follows:
 
 
 <p align="center"><img src="./texfit_proc.gif" width="30%"> <img src="./texfit_comp.gif" width="60%"></p>
 <p align="center">Left: Texture optimization process, Right: Comparison of ground truth mesh and textured SMPL+D</p>
 
+# Prepare your own data
+## Motion capture data
 
 ## Citation
 If you find this repo useful for your work, please cite the follow technical paper

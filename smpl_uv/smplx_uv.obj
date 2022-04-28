@@ -1,5 +1,7 @@
 # Blender v2.90.1 OBJ File: ''
 # www.blender.org
+mtllib smplx_uv.mtl
+usemtl smplx
 o smplx_uv
 v 0.062714 0.288500 -0.009561
 v 0.066796 0.287508 -0.008525

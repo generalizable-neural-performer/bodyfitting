@@ -27,12 +27,12 @@ def config_parser():
                         help='target directory storing obj data')
     parser.add_argument("--output_dir", type=str,
                         default="./logs",
-                        help='target directory storing obj data')
+                        help='output directory for fitted smpl and parameters')
     parser.add_argument("--openpose_dir", type=str,
                         default="../openpose",
-                        help='target directory storing obj data')
+                        help='directory of built openpose binary file')
     parser.add_argument("--info_dir", type=str,
-                        help='target directory storing obj data')
+                        help='csv file which contains gender information')
     parser.add_argument('--debug', default=True, action='store_true',
                         help='is output debug, false will speed up')
     parser.add_argument('--load_size', default=512, type=int,
@@ -45,7 +45,7 @@ def config_parser():
     parser.add_argument('--smpl_type', default="smpl", type=str,
                         help='use smpl or smplx')
     parser.add_argument('--age', default="adult", type=str,
-                        help='use smpl or smil')
+                        help='use smpl/smplx or smil')
     parser.add_argument('--smplx_with_smpl_init', default=True, action='store_true',
                         help='if use smpl fitting result to initialize smplx fitting')
     parser.add_argument('--viewnum', type=int, default=8, 

@@ -11,6 +11,8 @@
 #  Creative Commons Attribution 4.0 International License
 #  https://smpl.is.tue.mpg.de/bodylicense
 #
+mtllib smpl_uv.mtl
+usemtl smpl
 v 0.042479 0.477178 0.086266
 v 0.036918 0.464265 0.095966
 v 0.047306 0.458996 0.087464

@@ -21,15 +21,15 @@ def config_parser():
                         default="/data/ours_new",
                         help='target directory storing obj data')
     parser.add_argument("--annot_dir", type=str,
-                        help='target directory storing obj data')
+                        help='annot file contains camera parameter')
     parser.add_argument("--output_dir", type=str,
                         default="./logs",
-                        help='target directory storing obj data')
+                        help='directory contains output smpl and parameter')
     parser.add_argument("--openpose_dir", type=str,
                         default="../openpose",
-                        help='target directory storing obj data')
+                        help='directory of built openpose binary file')
     parser.add_argument("--info_dir", type=str,
-                        help='target directory storing obj data')
+                        help='csv file which contains gender information')
     parser.add_argument('--debug', default=True, action='store_true',
                         help='is output debug, false will speed up')
     parser.add_argument('--subject', type=str, default='zhuna',
@@ -87,6 +87,7 @@ class runner():
         self.mask_frames = [1,7,13,19,25,31,37,43] # frames with groud truth masks
 
     def get_views(self):
+        # In GeneBody data, there exist some view missing in several sequences
         all_cameras_raw = list(range(48))
         if self.subject == 'Tichinah_jervier' or self.subject == 'dannier':
             all_cameras = list(set(all_cameras_raw) - set([32]))
@@ -110,11 +111,14 @@ class runner():
     def get_data(self, frame):
         img_dir = os.path.join(self.output_dir, '%06d' % frame, 'images')
         os.makedirs(img_dir, exist_ok=True)
+
+        imgnames = sorted(os.listdir(os.path.join(self.target_dir, 'image', '00')))
+        msknames = sorted(os.listdir(os.path.join(self.target_dir, 'mask', '00')))
         
         Ks, Rts, use_frames, mask_frames, images, masks = [], [], [], [], [], []
         for i, view in enumerate(self.views):
-            img = imageio.imread(os.path.join(self.target_dir, 'image', '{:02d}'.format(view), '%04d.jpg' % frame))
-            msk = imageio.imread(os.path.join(self.target_dir, 'mask', '{:02d}'.format(view), 'mask%04d.png' % frame))
+            img = imageio.imread(os.path.join(self.target_dir, 'image', '{:02d}'.format(view), imgnames[frame]))
+            msk = imageio.imread(os.path.join(self.target_dir, 'mask', '{:02d}'.format(view), msknames[frame]))
             top, left, bottom, right = image_cropping(msk)
             img = img * (msk > 128)[...,None]
             img = cv2.resize(img[top:bottom, left:right].copy(), (self.load_size, self.load_size), cv2.INTER_CUBIC)
