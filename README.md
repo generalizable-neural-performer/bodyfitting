@@ -1,8 +1,8 @@
-# BodyFitting - A Multi-view SMPLx Optimization Framework
+# BodyFitting - A Multi-view SMPL Optimization Framework
 
-Bodyfitting is the SMPLx fitting tool in "Generalizable Neural Performer: Learning Robust Radiance Fields for Human Novel View Synthesis" and GeneBody Dataset. 
+Bodyfitting is the SMPL fitting tool in "Generalizable Neural Performer: Learning Robust Radiance Fields for Human Novel View Synthesis" and GeneBody Dataset. 
 
-This toolbox can register SMPLx from calibrated motion capture images, as well as the synthetic meshes; SMPL+D and texture fitting is also provided.
+This toolbox can register SMPL from calibrated motion capture images, as well as the synthetic meshes; SMPL+D and texture fitting is also provided.
 
 ## Setup environment
 The project is built on python3.6 and torch 1.2, you can set up the environment as:
@@ -15,7 +15,7 @@ cd thirdparty/mesh_grid && python setup.py install
 Note: *neural_renderer* in this repo is a modified version for texture fitting. *mesh_grid* is our implemetation of mesh closest point.
 
 ## Data Download
-Please download the SMPLx model from [here](https://smpl-x.is.tue.mpg.de/), and HMR model from [here](https://hkustconnect-my.sharepoint.com/:u:/g/personal/wchengad_connect_ust_hk/EXuFgaiOuMRMh8O_oNzc3DYBlSyxsVOPWNA-Qn3m4PV-zA?e=Aie8nd), and put them in the *data* folder.
+Please download the [SMPL](https://smpl-x.is.tue.mpg.de/)/[SMPLx](https://smpl.is.tue.mpg.de/) model, and HMR model from [here](https://hkustconnect-my.sharepoint.com/:u:/g/personal/wchengad_connect_ust_hk/EXuFgaiOuMRMh8O_oNzc3DYBlSyxsVOPWNA-Qn3m4PV-zA?e=Aie8nd), and put them in the *data* folder.
 
 ## 2D keypoint detector
 We require Openpose for 2D keypoint detection, please build the cpp version from the [instructions](https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/doc/installation/0_index.md#compiling-and-running-openpose-from-source).
@@ -27,14 +27,14 @@ Other alts such as [MMPose](https://github.com/open-mmlab/mmpose) also fits this
 ### Motion capture data fitting
 You can fit your motion capture data using the following command, choose `smpl_type` and `use_mask` to enable silhouette fitting if human segmentation is given.
 ```bash
-python apps/genebody_fitting.py --target_dir path_to_images --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type smplx --use_mask --tasks openpose smplify output
+python apps/genebody_fitting.py --target_dir path_to_images --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type SMPL --use_mask --tasks openpose smplify output
 ```
 You can find the SMPL obj file and optimized parameters in path_to_output.
 
 ### Mesh data fitting 
 You can fit your Render People mesh data using the following command. To perform SMPL+D and texture fitting, please add `smpld` and `texfit` in tasks list.
 ```bash
-python apps/rp_fitting.py --target_dir path_to_images --info_dir path_to_csv_file --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type smplx --smpl_uv_dir ./smpl_uv --tasks openpose smplify smpld texfit output 
+python apps/rp_fitting.py --target_dir path_to_images --info_dir path_to_csv_file --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type SMPL --smpl_uv_dir ./smpl_uv --tasks openpose smplify smpld texfit output 
 ```
 
 ### Texture fitting
