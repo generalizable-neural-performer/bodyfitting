@@ -44,8 +44,6 @@ Texture fitting takes opitmized SMPL+D as input, and optimize the texture image 
 <p align="center"><img src="./texfit_proc.gif" width="30%"> <img src="./texfit_comp.gif" width="60%"></p>
 <p align="center">Left: Texture optimization process, Right: Comparison of ground truth mesh and textured SMPL+D</p>
 
-# Prepare your own data
-## Motion capture data
 
 ## Citation
 If you find this repo useful for your work, please cite the follow technical paper
