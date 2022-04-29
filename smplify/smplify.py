@@ -156,7 +156,7 @@ class SMPLify():
             constant_scale = scan_height / 1.7
             
         else:
-            # constant scale is a scale prior knowledge of the scene, eg. for GHR data the scene scale is 0.3
+            # constant scale is a scale prior knowledge of the scene, eg. for GeneBody data the scene scale is 0.3
             constant_scale = 0.3
         # prepare for optimization
         body_pose.requires_grad = True

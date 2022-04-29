@@ -24,17 +24,34 @@ Other alts such as [MMPose](https://github.com/open-mmlab/mmpose) also fits this
 
 ## Demos
 
+### Organize your data
+## Datasets
+Take fitt GeneBody and RenderPeople as an example, first you should organize your data directory as follows
+```
+├──genebody/
+  ├──amanda/
+  ├──barry/
+  ├──...
+├──rp_scans/
+  ├──rp_alexandra_posed_013_OBJ/
+  ├──rp_alisha_posed_001_OBJ/
+  ├──rp_alvin_posed_006_OBJ/
+  ├──...
+```
+
+
 ### Motion capture data fitting
 You can fit your motion capture data using the following command, choose `smpl_type` and `use_mask` to enable silhouette fitting if human segmentation is given.
+For example to fit `amanda` sequnece
 ```bash
-python apps/genebody_fitting.py --target_dir path_to_images --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type SMPL --use_mask --tasks openpose smplify output
+python apps/genebody_fitting.py --target_dir path_to_genebody --subject amanda --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type smplx --use_mask --tasks openpose smplify output
 ```
-You can find the SMPL obj file and optimized parameters in path_to_output.
+You can find the SMPL/SMPLx obj file and optimized parameters in path_to_output.
 
 ### Mesh data fitting 
 You can fit your Render People mesh data using the following command. To perform SMPL+D and texture fitting, please add `smpld` and `texfit` in tasks list.
 ```bash
-python apps/rp_fitting.py --target_dir path_to_images --info_dir path_to_csv_file --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type SMPL --smpl_uv_dir ./smpl_uv --tasks openpose smplify smpld texfit output 
+python apps/rp_fitting.py --target_dir path_to_rp_scans --openpose_dir path_to_openpose --output_dir path_to_output --smpl_type smplx --smpl_uv_dir ./smpl_uv --tasks openpose smplify smpld texfit output 
 ```
 
 ### Texture fitting

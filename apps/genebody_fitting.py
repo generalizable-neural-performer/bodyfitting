@@ -1,4 +1,4 @@
-## This script is for SMPL fitting for GHR dataset
+## This script is for SMPL fitting for Genebody dataset
 
 
 import os, sys
@@ -18,7 +18,7 @@ def config_parser():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--target_dir", type=str,
-                        default="/data/ours_new",
+                        default="/data/genebody",
                         help='target directory storing obj data')
     parser.add_argument("--annot_dir", type=str,
                         help='annot file contains camera parameter')
